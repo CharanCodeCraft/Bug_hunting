@@ -11,3 +11,4 @@ Here u try to manipulate the response coming from server before it reaches brows
 
 ## References
 * Authentication bypass - https://avanishpathak.medium.com/an-account-takeover-vulnerability-due-to-response-manipulation-e23fe629bd1
+* [Email Confirmation Bypass in your-store.myshopify.com which leads to privilege escalation](https://hackerone.com/reports/910300) to Shopify - 537 upvotes
