@@ -34,6 +34,7 @@
 * After looking for identifier then look for mechanisms for get,post,update,delete methods basically CRUD operation
 * For example if user A can perform all CRUD but where as user B shouldn't be able to do on behalf of user A 
 * Try to fuzz parameter that u find in one request to all other requests
+* U should look for idor in such a way u are in ur session but using someones id to perform serious fuctions on them
 ## Identifier complexity(predicting id of other user)
 
 1. Decimal number shorter than 8
