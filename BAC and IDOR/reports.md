@@ -31,3 +31,20 @@
 10. [Able to see Bonus amount given to a report even if the bounty and Bonus is not visible to public or mentioned in {Report-Id}.json](https://hackerone.com/reports/2101087)
     * always note down what’s supposed to be public and what not
     * check for small things that could be found 
+11. [IDOR - Delete all Licenses and certifications from users account using CreateOrUpdateHackerCertification GraphQL query](https://hackerone.com/reports/2122671)
+    * Here he was able to change the id and can delete the licence of others
+    * U need to understand the fuctions of the application
+12. [IDOR allows an attacker to delete anyone's featured photo.](https://hackerone.com/reports/1608735)
+    * Try to make them understand POC well and don't stop reporting if u find it exploitable
+    * Here he was able to get the id by viewing the images of others which is not bruteforceable so he could delete image
+13. [An Attacker Can Flag Draft Job Posts And Can Disclose The Draft Job Posts Details [ Similar to #1581528 Resolved Report]](https://hackerone.com/reports/1675674)
+    * Sometimes resolved bug can still be a bug when it is not completely resolved
+    * here the bug was only resolved that he was not able to get mail but was still able to get notification from linkdin
+14. [Any (non-admin) user from an instance can destroy any (user and/or global) external filesystem](https://hackerone.com/reports/2047168)
+    * When u have a view or get request try to send a delete request to same endpoint see if it works
+    * changing request method specially delete can be used
+15. [Rider can forcefully get passenger's order accepted resulting in multiple impacts including PII reveal and more mentioned in the report.](https://hackerone.com/reports/1960107)
+    * Try to chain attacks 
+16. [Attacker can create malicious child epics linked to a victim's epic in an unrelated group](https://hackerone.com/reports/1892200)
+17. [Attacker is able to create,Edit & delete notes and leak the title of a victim's private personal snippet](https://hackerone.com/reports/1751258)
+    * Try to change the operation that is being passed in a post body request sometimes if u know the exact operation name
