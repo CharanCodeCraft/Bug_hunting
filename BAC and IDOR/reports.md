@@ -1,4 +1,4 @@
-## Broken Access Control Reports
+## Broken Access Control  and IDOR Reports
 
 1. [Email Confirmation Bypass in myshop.myshopify.com that Leads to Full Privilege Escalation to Any Shop Owner by Taking Advantage of the Shopify SSO](https://hackerone.com/reports/791775) to Shopify - 1844 upvotes, $16000
     * It is design flaw where email address can be changed to any already logined account bcuz u can change email just by reciveing confirmation link to old email 
@@ -45,6 +45,6 @@
     * changing request method specially delete can be used
 15. [Rider can forcefully get passenger's order accepted resulting in multiple impacts including PII reveal and more mentioned in the report.](https://hackerone.com/reports/1960107)
     * Try to chain attacks 
-16. [Attacker can create malicious child epics linked to a victim's epic in an unrelated group](https://hackerone.com/reports/1892200)
+16. [Attacker can create malicious child epics linked to a victim's epic in an unrelated group](https://hackerone.com/reports/1892200)Attacker is able to create,Edit & delete notes and leak the title of a victim's private personal snippet
 17. [Attacker is able to create,Edit & delete notes and leak the title of a victim's private personal snippet](https://hackerone.com/reports/1751258)
     * Try to change the operation that is being passed in a post body request sometimes if u know the exact operation name

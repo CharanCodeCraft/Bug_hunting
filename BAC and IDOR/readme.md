@@ -117,3 +117,6 @@
 * Access control on multi-stage process
     - many kinds of functions within an application are implemented across several stages, involving multiple requests being sent form the client to the server
     - the developer assumes that any user who reaches the later stages of the process must have the relevant privileges because this was verified at the earlier stages
+* Restriction bypass(403 or 401)
+    - u can use 403 bypasser tool to bypass
+    - and also u need to check manually through book.hacktricks guide
