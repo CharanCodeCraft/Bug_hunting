@@ -47,6 +47,7 @@
 ## Methodology(BAC)
 
 * Create all different roles and note what they can do and what not
+* Create verified and unverified account and test there features 
 * Log in to powerful account to locate all the functionality and try to access it using low prev 
 * Graphql endpoint 
     - In this type fetching data u need to look for operation or json request that are being performed
@@ -120,3 +121,5 @@
 * Restriction bypass(403 or 401)
     - u can use 403 bypasser tool to bypass
     - and also u need to check manually through book.hacktricks guide
+* Verification access control 
+    - Try to differentiate verified and unverified account features and try to access it through unverified 

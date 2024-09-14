@@ -1,5 +1,5 @@
 ## Broken Access Control  and IDOR Reports
-
+### IDOR
 1. [Email Confirmation Bypass in myshop.myshopify.com that Leads to Full Privilege Escalation to Any Shop Owner by Taking Advantage of the Shopify SSO](https://hackerone.com/reports/791775) to Shopify - 1844 upvotes, $16000
     * It is design flaw where email address can be changed to any already logined account bcuz u can change email just by reciveing confirmation link to old email 
     * Takeaway - look for Email changing function where u can change it by just confirming using old email 
@@ -48,3 +48,21 @@
 16. [Attacker can create malicious child epics linked to a victim's epic in an unrelated group](https://hackerone.com/reports/1892200)Attacker is able to create,Edit & delete notes and leak the title of a victim's private personal snippet
 17. [Attacker is able to create,Edit & delete notes and leak the title of a victim's private personal snippet](https://hackerone.com/reports/1751258)
     * Try to change the operation that is being passed in a post body request sometimes if u know the exact operation name
+### Bypass restrictions
+18. [Bypass report submit restriction/ban using the API key](https://hackerone.com/reports/2081930)
+19. [Password of talk conversations can be bruteforced](https://hackerone.com/reports/2094473)
+    * if POST parameter is rate limited, try sending the request via GET method
+20. [Bypassing Garbage Collection with Uppercase Endpoint](https://hackerone.com/reports/2078527)
+    * If /metrics/ gives 403, try /METRICS/ changing to capes work in windows based server
+21. [Text does not respect 'Allow download' permissions](https://hackerone.com/reports/1965156)
+    * Try bypassing image restrictions via preview features
+22. [A Unverified User Can Post Newsletter (Which Is Not Allowed Through Application UI)](https://hackerone.com/reports/1691603)
+    * Check what restrictions unverified users(meaning email not verified) have vs verified ones and try to check verfied ones 
+23. [Banned user still able to invited to reports as a collabrator and reset the password](https://hackerone.com/reports/1959219)
+    * U can request for something from application dev team like banning user and checking for him to access control fuctionality
+    * U just try to search for different roles a user gets in different context like banner user
+24. [inDriver Job - Admin Approval Bypass](https://hackerone.com/reports/1861487)
+    * Access control issue on multi step process by just going to last step and changing parameter value
+### Paywall bypass
+25. [IDOR to pay less for coin purchases on oauth.reddit.com via /api/v2/gold/paypal/create_coin_purchase_order in `order_id` parameter] (https://hackerone.com/reports/1213765)
+    * Just try to use the response of one request to other request that can bring impact
