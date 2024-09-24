@@ -80,5 +80,20 @@
         * xss-protection, it can have 0,1 or 2, 1 means safe
         * Or x-frame,cache-control
 6. Output Encoding
+    * See if the reflected special character is url encoded 
 1. Client-side validation
+    * See inputing different characters in website and if it show any exception
 2. Server-side validation
+    * See inputing different characters in Proxy(repeater) and if it strips it in any way
+#### After finding compensating controls
+1. Output encoding
+    * Try to go through all character in fuzz dir of seclist to identify which are being encoded and which aren't
+    * Also try to throw different encoded characters in fuzz to bypass
+    * try to put some fuzzing character(in fuzz/naughty characters) before the encoding character like `rson$????????$"`
+2. WAF bypass 
+    * Try to put simple `<script>` tag and see if it cacthes it
+    * then try to use other tags like img,a,svg and other...
+    * Use OWASP cheat sheet and portswigger cheatsheet to get payload of different tags
+    * Try to change case of letters,open tag twice and add `+` b/w tag name or use `%0a` which \r\n negleted
+## XSS Tips
+* The location where the input is reflected is very useful in determineing payload and how u can weaponize xss
