@@ -67,6 +67,18 @@
     * Respose with json content type is not so useful
 #### Check for compensenting controls after finding good enpoints
 3. WAF(Webapplication firewall)
+    * Some common WAF 
+        ```Amazon Cloudfront
+            Cloudflare
+            Imperva
+            Akamai kona site defender
+            F5 Advanced WAF
+            Barracuda Web Application Firewall
+            Fortinet FortiWeb
+            Microsoft Azure Web Application Firewall
+            Radware AppWall
+            Sucuri WAF
+            ```
     * See the forbidden resoponse to find out waf most of the times it will be cloudfront
     * see in awesome waf github for ways to detect or bypass waf
     * Try 
@@ -111,6 +123,7 @@
 * Don't forget to encode
 * To bypass CSP if it allows script to run from other source(Script-src: *) so we can use blind xss technique 
     * U can use csp evaluator
+* Always try adding &random=parameter to get request to see how’s it being handled
 ## Blind XSS
 * It is smiliar to stored xss but we are just aiming at companies systems like support team or any other who uses to monitor the sent data with there company account
 * To find this xss u need to look for endpoint which passes data to there system like contact us or support team or user data used to moitor some kind of stuff
@@ -171,3 +184,7 @@ function sendReq(){
 var req = new XMLHttpRequest(); req.onload = reqListener; req.open('delete','http://cors.bepractical.tech/api/user/   delete',true); req.withCredentials = true; req.send('{}'); function reqListener() { alert(this.responseText); };
 }
 </script>`
+### RXSS in Laravel framework
+* If u find a website laravel framework then u can check for RXSS
+* There is chance of XSS if debug mode is on in `/_ignition/execute-solution`
+* Payload - `/_ignition/scripts/--%3E%3Csvg%20onload=alert('cappriciosec.com')%3E`
