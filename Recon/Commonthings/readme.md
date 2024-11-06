@@ -23,8 +23,12 @@ Normaly people use httpx default command and they only filter subdomains with po
 * cat httpx_domain.com.txt | awk '{print $1}' > live_subs_domain.com.txt
 ### Scanning for open ports
 For checking open ports i used naabu its very fast by this i can check the result of open ports and what service is running on that port is it contain any vulnerable version so i exploit that service thats why port enumeration is important
-
-naabu -list subdomains.txt  -c 50 -nmap-cli 'nmap -sV -sC'  -o naabu-full.txt
+* To remove https:// - sed 's|https://||' live_subs_domain.com.txt >live.txt
+* naabu -list subdomains.txt  -c 50 -nmap-cli 'nmap -sV -sC'  -o naabu-full.txt
+* Port 21 (FTP): Anonymous login, weak credentials, outdated software.
+* Port 22 (SSH): Weak passwords, outdated software, improper configuration
+* Port 3306 (MySQL): Weak passwords, SQL Injection.
+* Port 80/443 (HTTP/HTTPS): Cross-Site Scripting (XSS), SQL Injection, outdated software.
 ### Nuclei Automated Live Subdomains Spray (with rate limit)
 * nuclei -l live_subs_domain.com.txt -rl 10 -bs 2 -c 2 -as -silent -s critical,high,medium
 * -l live_subs_domain.com.txt: Specifies the input file containing the live subdomains.
@@ -40,7 +44,7 @@ naabu -list subdomains.txt  -c 50 -nmap-cli 'nmap -sV -sC'  -o naabu-full.txt
 * cat nowaf_subs_domain.com.txt | grep 403 | awk '{print $1}' > 403_subs_domain.com.txt
 ### 403 fuzzing
 * Default Wordlist Fuzzing
-    - dirsearch -u https://sub.domain.com -x 403,404,500,400,502,503,429 --random-agent
+    - dirsearch -l batches/ -x 403,404,500,400,502,503,429 --random-agent
 * Extension based Fuzzing
     - dirsearch -u https://sub.domain.com -e xml,json,sql,db,log,yml,yaml,bak,txt,tar.gz,zip -x 403,404,500,400,502,503,429 --random-agent
 ### Finding Appropriate Wordlists📗
@@ -49,7 +53,6 @@ naabu -list subdomains.txt  -c 50 -nmap-cli 'nmap -sV -sC'  -o naabu-full.txt
 * dirsearch -u https://sub2.sub1.domain.com -x 403,404,500,400,502,503,429 -e xml,json,sql,db,log,yml,yaml,bak,txt,tar.gz,zip -w /usr/share/seclists/Discovery/Web-Content/ApacheTomcat.fuzz.txt
 ### Finding Hidden Database Files
 * dirsearch -u https://sub2.sub1.domain.com -x 403,404,500,400,502,503,429 -e xml,json,sql,db,log,yml,yaml,bak,txt,tar.gz,zip -w /path/to/wordlists/database.txt
-
 ### Parameter discovery
 Now for fetching all urls from archive from many source i used gau rather then wayback bcz it use many sources and its all passive you can use katana for active urls and anew with that files.after use uro to filter out duplicates params..
 
@@ -60,81 +63,81 @@ Now for fetching all urls from archive from many source i used gau rather then w
     - cat newparms.txt | uro > filterparm.txt
 
 And for js files that contains senstive keyss and pass i used grep command you can also fetch it by katana by  -jc flag for active js endpoint.
-
+* cat waymore_domain.com.txt | grep "=" | grep "&" | grep "?"
 cat  filterparam.txt | grep ".js$" > jsfiles.txt
 ### Nuclei template for finding js exposed keys
 * cat jsfiles.txt | nuclei -t /home/charan/nuclei-templates/http/exposures -c 30
-* nuclei -l js.txt -t /home/kali/.local/nuclei-templates/http/exposures -o potential_secrets.txt
+* nuclei -l js.txt -t /home/charan/nuclei-templates/http/exposures -o potential_secrets.txt
 ### JUICY PATTERN FINDING
 * UUID🆔 for IDOR
-    - grep -Eo '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}' wayback_domain.com.txt | sort -u 
+    - grep -Eo '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}' filterparm.txt | sort -u 
 * JWT
-    - cat wayback_domain.com.txt | grep "eyJ"
+    - cat filterparm.txt | grep "eyJ"
 * Any suspicious keyword/path/number
-    - grep -Eo '([a-zA-Z0-9_-]{20,})' wayback_domain.com.txt
+    - grep -Eo '([a-zA-Z0-9_-]{20,})' filterparm.txt
 * SSN (Social Security Number)
-    - grep -Eo '\b[0-9]{3}-[0-9]{2}-[0-9]{4}\b' wayback_domain.com.txt
+    - grep -Eo '\b[0-9]{3}-[0-9]{2}-[0-9]{4}\b' filterparm.txt
 * Credit Card Numbers
-    - grep -Eo '\b[0-9]{13,16}\b' wayback_domain.com.txt
+    - grep -Eo '\b[0-9]{13,16}\b' filterparm.txt
 * Potential SessionIDs and cookies
-    - grep -Eo '[a-zA-Z0-9]{32,}' wayback_domain.com.txt
+    - grep -Eo '[a-zA-Z0-9]{32,}' filterparm.txt
 * Tokens + Secrets
-     ```cat wayback_domain.com.txt | grep "token"
-     cat wayback_domain.com.txt | grep "token="
-     cat wayback_domain.com.txt | grep "code"
-     cat wayback_domain.com.txt | grep "code="
-      cat wayback_domain.com.txt | grep "secret"
-      cat wayback_domain.com.txt | grep "secret="```
+     ```cat filterparm.txt | grep "token"
+     cat filterparm.txt | grep "token="
+     cat filterparm.txt | grep "code"
+     cat filterparm.txt | grep "code="
+      cat filterparm.txt | grep "secret"
+      cat filterparm.txt | grep "secret="```
 * Others
-   ``` cat wayback_domain.com.txt | grep "admin"
-cat wayback_domain.com.txt | grep "pass"
-cat wayback_domain.com.txt | grep "pwd"
-cat wayback_domain.com.txt | grep "passwd"
-cat wayback_domain.com.txt | grep "password"
-cat wayback_domain.com.txt | grep "phone"
-cat wayback_domain.com.txt | grep "mobile"
-cat wayback_domain.com.txt | grep "number"
-cat wayback_domain.com.txt | grep "mail"```
+   ``` cat filterparm.txt | grep "admin"
+cat filterparm.txt | grep "pass"
+cat filterparm.txt | grep "pwd"
+cat filterparm.txt | grep "passwd"
+cat filterparm.txt | grep "password"
+cat filterparm.txt | grep "phone"
+cat filterparm.txt | grep "mobile"
+cat filterparm.txt | grep "number"
+cat filterparm.txt | grep "mail"```
 * Private IP Address🚨
-    - grep -Eo '((10|172\.(1[6-9]|2[0-9]|3[0-1])|192\.168)\.[0-9]{1,3}\.[0-9]{1,3})' wayback_domain.com.txt
-    - grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' wayback_domain.com.txt
+    - grep -Eo '((10|172\.(1[6-9]|2[0-9]|3[0-1])|192\.168)\.[0-9]{1,3}\.[0-9]{1,3})' filterparm.txt
+    - grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' filterparm.txt
 * IPv6🔴
-    - grep -Eo '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}' wayback_domain.com.txt
+    - grep -Eo '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}' filterparm.txt
 * Payment💸
-    ```grep "payment" wayback_domain.com.txt
-grep "order" wayback_domain.com.txt
-grep "orderid" wayback_domain.com.txt
-grep "payid" wayback_domain.com.txt
-grep "invoice" wayback_domain.com.txt
-grep "pay" wayback_domain.com.txt
+    ```grep "payment" filterparm.txt
+grep "order" filterparm.txt
+grep "orderid" filterparm.txt
+grep "payid" filterparm.txt
+grep "invoice" filterparm.txt
+grep "pay" filterparm.txt
 ```
 * API Endpoint👾
-```grep "/v1/" wayback_domain.com.txt
-grep "/v2/" wayback_domain.com.txt
-grep "/v3/" wayback_domain.com.txt
-grep "/v4/" wayback_domain.com.txt
-grep "/v5/" wayback_domain.com.txt
+```grep "/v1/" filterparm.txt
+grep "/v2/" filterparm.txt
+grep "/v3/" filterparm.txt
+grep "/v4/" filterparm.txt
+grep "/v5/" filterparm.txt
 ```
-```grep "/api/" wayback_domain.com.txt
-grep "api." wayback_domain.com.txt
-grep "api" wayback_domain.com.txt
-grep "/graphql" wayback_domain.com.txt
-grep "graphql" wayback_domain.com.txt
+```grep "/api/" filterparm.txt
+grep "api." filterparm.txt
+grep "api" filterparm.txt
+grep "/graphql" filterparm.txt
+grep "graphql" filterparm.txt
 ```
 * Authentication & Authorization👮‍♂️
-```cat wayback_domain.com.txt | grep "sso"
-cat wayback_domain.com.txt | grep "/sso"
-cat wayback_domain.com.txt | grep "saml"
-cat wayback_domain.com.txt | grep "/saml"
-cat wayback_domain.com.txt | grep "oauth"
-cat wayback_domain.com.txt | grep "/oauth"
-cat wayback_domain.com.txt | grep "auth"
-cat wayback_domain.com.txt | grep "/auth"
-cat wayback_domain.com.txt | grep "callback"
-cat wayback_domain.com.txt | grep "/callback"
+```cat filterparm.txt | grep "sso"
+cat filterparm.txt | grep "/sso"
+cat filterparm.txt | grep "saml"
+cat filterparm.txt | grep "/saml"
+cat filterparm.txt | grep "oauth"
+cat filterparm.txt | grep "/oauth"
+cat filterparm.txt | grep "auth"
+cat filterparm.txt | grep "/auth"
+cat filterparm.txt | grep "callback"
+cat filterparm.txt | grep "/callback"
 ```
 * Information Disclosure via exposed files📂
-    - grep -Eo 'https?://[^ ]+\.(env|yaml|yml|json|xml|log|sql|ini|bak|conf|config|db|dbf|tar|gz|backup|swp|old|key|pem|crt|pfx|pdf|xlsx|xls|ppt|pptx)' wayback_domain.com.txt
+    - grep -Eo 'https?://[^ ]+\.(env|yaml|yml|json|xml|log|sql|ini|bak|conf|config|db|dbf|tar|gz|backup|swp|old|key|pem|crt|pfx|pdf|xlsx|xls|ppt|pptx)' filterparm.txt
 * Google Dork
     - site:domain.com ext:env OR ext:yaml OR ext:yml OR ext:json OR ext:xml OR ext:zip OR  ext:log OR ext:sql OR ext:ini OR ext:bak OR ext:conf OR ext:config OR ext:db OR ext:dbf OR ext:tar OR ext:gz OR ext:backup OR ext:swp OR ext:old OR ext:key OR ext:pem OR ext:crt OR ext:pfx OR ext:pdf OR ext:xlsx OR ext:xls OR ext:ppt OR ext:pptx
 
@@ -160,3 +163,15 @@ before this if you want seperate vulnerability and  find with any other tool for
 nuclei -list sorted_wordlist_100000.txt -t /home/coffinxp/Custom-Nuclei-Templates/
 
 i have many things to add but due to yt policy i cant do much but i will send in channel bcz some tools have so much powerful and detected by the yt bot..i will make seperate video for that for http request smuggling,crlf injection,csrf,rce,cache poisoning,jwt attacks etc...
+### After this
+* when start to test on main domain 
+    - try this google dork site:domain.com inurl:= inurl:? inurl:&
+    - and try to collect passive url and check manually, sometimes u find unauthenticated endpoints
+    - cat waymore_domain.com.txt | grep "=" | grep "&" | grep "?"
+    - arjun -u https://tst2.dev.targets.com/cgi-bin/fr.cfg/php/custom/id-pass.php -m GET -w Parameters_Fuzz.txt
+### Google dork for open redirect
+* site:*.google.com inurl:redirect
+
+### Some other tools
+* Robinhood
+* graphqlmap

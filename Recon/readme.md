@@ -20,7 +20,12 @@ responsible disclosure hall of fame
 * For domain testing 
 ```site:*.dell.com "keyword"
 inurl:/admin
+site:hackerone.com inurl:reports "Default Credentials"
+site:linkedin.com inurl:posts "SQLi WAF bypass"
+site:hackerone.com inurl:reports "Bypass of report"
 ```
+* site:domain.com inurl:= inurl:? inurl:&
+
 ### Shodan Search engine
 * So shodan is a search engine which collects the data of vulnerable devices in internet
 * If any new CVE is released and if u search for it u will get vulnerable website on that cve and same goes with wordpress version
@@ -46,3 +51,4 @@ inurl:/admin
 - look for xmlrpc.php for brute force or ping back
 - look for /wp-json/wp/v2/users for user enumaertion
 - see the wp file structure to get some directory 
+- fuzz with seclists/Discovery/Web-content/CMS/wordpress.fuzz.txt
