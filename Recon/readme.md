@@ -25,7 +25,55 @@ site:linkedin.com inurl:posts "SQLi WAF bypass"
 site:hackerone.com inurl:reports "Bypass of report"
 ```
 * site:domain.com inurl:= inurl:? inurl:&
+* for open redirect
+```
+site:domain.com inurl:keyword1here inurl:keyword2here .......
 
+Make your own custom dorks using combinations of keywords below
+
+🤑Keywords for OpenRedirect Urls
+#set1
+redir
+redirect
+redirect_uri
+redirect_url
+uri
+url
+next
+out
+to
+forward
+view
+
+#set2
+oauth
+auth
+client
+response
+code
+sso
+authorize
+token
+secret
+type
+
+#set3
+v1
+v2
+v3
+v4
+2F (2F means /)
+3A (3A means :)
+
+http:// ->  http3A2F2F😎
+
+#set4
+login
+identity
+iam
+oidc
+saml
+```
 ### Shodan Search engine
 * So shodan is a search engine which collects the data of vulnerable devices in internet
 * If any new CVE is released and if u search for it u will get vulnerable website on that cve and same goes with wordpress version

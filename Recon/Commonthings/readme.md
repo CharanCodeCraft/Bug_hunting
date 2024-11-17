@@ -23,7 +23,7 @@ Normaly people use httpx default command and they only filter subdomains with po
 * cat httpx_domain.com.txt | awk '{print $1}' > live_subs_domain.com.txt
 ### Scanning for open ports
 For checking open ports i used naabu its very fast by this i can check the result of open ports and what service is running on that port is it contain any vulnerable version so i exploit that service thats why port enumeration is important
-* To remove https:// - sed 's|https://||' live_subs_domain.com.txt >live.txt
+* To remove https:// - sed 's|https://||' live_subs_domain.com.txt >fornaabu.txt
 * naabu -list subdomains.txt  -c 50 -nmap-cli 'nmap -sV -sC'  -o naabu-full.txt
 * Port 21 (FTP): Anonymous login, weak credentials, outdated software.
 * Port 22 (SSH): Weak passwords, outdated software, improper configuration

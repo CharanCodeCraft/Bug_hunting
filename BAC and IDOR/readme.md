@@ -123,3 +123,205 @@
     - and also u need to check manually through book.hacktricks guide
 * Verification access control 
     - Try to differentiate verified and unverified account features and try to access it through unverified 
+
+## Amit tips
+```
+When acting as an editor, you have the ability to invite other users as editors. However, you are not allowed to delete users with "full" permissions. This is where an interesting exploit opportunity arises. The key is to intercept the request when attempting to delete another editor and replace the user ID of the target with that of a full-permission user.
+Example Scenario:
+Some sites send a delete request using a POST method in the following format:
+
+{
+ "userid": 8888,
+ "role": "read,edit",
+ "destroy": true
+}
+
+The server validates the 'role' parameter to ensure that the user initiating the delete action has the same or higher privileges than the target user. If an editor attempts to delete a user with a "full" role, the server will return an error, indicating insufficient permissions:
+
+
+{
+ "userid": 1111,
+ "role": "full",
+ "destroy": true
+} 
+// Server Response: 403 Forbidden
+
+Even if the editor modifies the 'role' parameter to indicate lower permissions like "view,edit", the server still checks the actual role of the target user. Therefore, it still responds with a 403 Forbidden:
+
+{
+ "userid": 1111,
+ "role": "view,edit",
+ "destroy": true
+}
+// Server Response: 403 Forbidden
+
+The Exploit: Removing the Role Parameter
+What if we simply remove the 'role' parameter from the request? By doing so, the server no longer receives any information about the target user's role to validate against. This effectively bypasses the role-based validation. Additionally, since there is no role parameter in the request, the server does not attempt to validate the current user's privileges, resulting in a successful 
+deletion:
+
+{
+ "userid": 1111,
+ "destroy": true
+}
+// Server Response: 200 OK
+
+By eliminating the role parameter, you can bypass the server’s validation checks and successfully delete users with full permissions.
+```
+* If there is an organization ID present, we can replace it with the victim organization's ID and schedule the victim organization for deactivation.
+* An attacker can exploit an Insecure Direct Object Reference (IDOR) vulnerability on example.com, allowing them to delete or edit a user invited to another organization. The attacker can first obtain the victim's invited user ID by sending a forged request to the backend API that lists all invitations in an organization. After obtaining the user ID, the attacker logs into their own account, intercepts the request used to modify their own invited user, and replaces their user ID with the victim's invited user ID. This grants the attacker the ability to delete or modify the invited user in the victim's organization without proper authorization. This attack bypasses access controls, posing a significant security risk.
+* always check for parameter in response if there is org id parameter in response we can add it in the request and replace our org id and victim template id to exploit the idor
+* am fully manual . I just go through each and every endpoint and try to find the vuln
+
+``` when there is single id and you change the id to the victim id and site gave the 403 there is no idor . i suggest you try to find the idor in the endpoint where is multiple id for example
+
+my company id is : 1 my : image id is 1234
+victim company id is 2 victim image id is 0000
+
+now suppose our request like
+
+POST /img/delete
+host
+cookie: e
+
+{
+org:1
+img:1234
+}
+now here the in this request there is 2 ids our org id and our image id
+
+now if we replace the victim org id and image id
+
+POST /img/delete
+host
+{
+org:2
+img:0000
+}
+
+ its going to give the error 403 the reason for this is we dont have the access of victim org whose id is 2
+but what if we do like this
+
+POST /img/delete
+host
+cookie: e
+{
+org: my org id
+img: victim image id
+}
+
+here i replace down my org id and victim image id
+
+now if on backend if its check first that does the user victim username:me has access to particular org or not so if we use the victim org id then this condition will restrict us as we dont have to access to org 2 
+
+but what if the developer forgot to check restriction for the image
+like its checking that we are part of org 2 or not but not checking that does we have access of that img whose id is 9999
+
+so on that point we can do like
+
+POST /img/delete
+host
+cookie: e
+{
+org:1
+img:0000
+}
+
+now site check user has access to org 1 but its dosent check does user also has access of img whose id is 0000 and because of this is image got deleted
+
+you can also reverse on some endpoints
+
+```
+* there is WebSocket i intercepted the request while edit my detail i found there is my id like 1111 i changed to 1102 and other user data changed and using this i was able to change the victim email address and after that just need to hit forgot password to takeover account
+
+```
+i just analyze the response and found there is status parameter which is set to be active 
+
+and by default its not allowing admin to edit the super admin but 
+
+i just intercept the request while edit any user there is role parameter i removed it and add new parameter name status and set to inactive
+
+so example request before exploit
+
+userid=1234&name=lords&role=admin
+
+and attacking request
+
+userid=superadmin-id&name=lords&status=inactive
+
+i sent the request and super admin is deactivated
+```
+```
+Am spending more than 14 hours on hunting daily.
+
+Thinnk logically try to break functionality its all about bug bounty. Try to combine multiple bugs and creat attack scenario 
+
+Example idor with xss so we can takeover user account
+
+
+And never lose hope it's just on confidence
+It took 9month for me for my 1 ts bounty so it's may take time but after that it's very easy
+```
+
+```
+ mostly search targets using Google dorks 
+
+While searching for target attach 2023 with our dork , also add random keyword while search , combine multiple dorks , and also use Google search tools
+
+Also exchange program from people
+
+If target not respond contact there support
+```
+* Site:*.*.com bug bounty 2023
+"Responsible disclosure" intext:bounty | intext:reward
+
+```
+SO WHILE IVITING THE USER REQUEST AS
+user.firstName=dsx&user.lastName=dsxz&user.email=VICTIM@MAIL.COM
+SO WHAT IS I ADD USER.PASSWORD=”AND NEW PASSWORD”
+SO I FORGED REQUEST AS
+user.firstName=dsxz&user.lastName=dsxz&user.email=VICTIM@MAIL.com&user.Password=”new password for victim”
+AND I SEND INVITATION AND I WAS ABEL TO INVITE THE USER
+```
+
+```
+info: while hunting on example.com i found there is 3 privileges
+admin,user,static
+and each of it has unique id like for
+admin=5,user=4,static=3
+“here i took 2 minutes to think like website implemented id to each privileges so what if there is other privilege which is not know to me “
+\\\\actual starting\\\\
+
+step1: so i logged in in admin account and while promoting the user i intercept the request
+step2: i sent it to the intruder selected the role field and selected payload type number from 0 to 100
+step3: and i started attack i get 200 on some of the numbers lik
+1,3,4,5,88,99
+step4: so i manually try to send this roles so request as
+{
+“email”:”ex@example.com”,
+”role”:1
+}
+and on first attempt i got success
+```
+```
+info: there is 3 privileges as admin , manager , member where the manager allow to invite users as manager and member and admin can manage them all
+
+issue: manager not allow to demote the admin but i was able to demote the admin using manager account
+
+//manager allow to invite the user as manager and member which is endpoint
+{“email”:”victim@mail.com”,”roleType”:”manager”,”allSites”:1}
+i just replaced the admin email and send the request
+```
+```
+i found role id here and every time run inruder on this endpoint
+so i just send the request to intruder selected role field and run number from 1 to 100
+and i got 3 200 ok
+for number 1,2,3
+```
+```
+inurl:admin "login"
+inurl:manager "login"
+inurl:user "login"
+site:*.*.com intext:"user roles" intitle:"crm"
+* site:*.*.com intext:"user roles" inurl:"docs"
+site:*.*.com intext:"pricing" intext:crm platforms
+```
