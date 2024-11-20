@@ -1,5 +1,7 @@
 # Broken access control and IDOR
-
+```
+By narrowing your focus to B2B applications, business logic, and Broken Access Control vulnerabilities, you're positioning yourself in a high-demand niche. With persistent learning and targeted efforts, you can become a successful and sought-after bug bounty hunter. Happy hunting!
+```
 ### Reference for theory
 
 - BAC - https://medium.com/@insightfulrohit/all-about-broken-access-control-cf6ec98a990b
@@ -324,4 +326,42 @@ inurl:user "login"
 site:*.*.com intext:"user roles" intitle:"crm"
 * site:*.*.com intext:"user roles" inurl:"docs"
 site:*.*.com intext:"pricing" intext:crm platforms
+site:hackerone.com OR site:bugcrowd.com OR site:intigriti.com OR site:yeswehack.com OR site:openbugbounty.org "target-name"
+site:*.target.com intext:"bug bounty"
+CRM (Hubspot, Pipedrive, Zoho), Customer Relations (Zendesk, Freshdesk, Aircall, Front)
+```
+### xssrat tips
+* Practice now! https://labs.hackxpert.com
+```
+Bug bounties have become a lucrative and intellectually stimulating career path for cybersecurity enthusiasts. While many guides cover general vulnerability hunting, narrowing your focus to B2B (Business-to-Business) applications, particularly around business logic and Broken Access Control (BAC), can set you apart as a specialized bug bounty hunter.```
+```
+Burp Suite (Pro or Community):
+Use the Repeater and Intruder tools for testing business logic.
+Extensions:
+Autorize: Helps check access control issues.
+Turbo Intruder: Useful for large-scale testing.
+```
+```
+Selecting Programs
+Focus on B2B applications that:
+Have multi-user roles (e.g., admin, manager, employee).
+Include sensitive operations (e.g., financial transactions, data exports).
+Use bug bounty platforms or search for public programs with interesting B2B targets.
+Examples: Enterprise CRMs, SaaS management platforms, HR management tools.
+```
+```
+Sign Up and Explore:
+Use trial accounts or demo versions to understand the application's workflows.
+Document the user roles and their permissions.
+Map Endpoints:
+Use Burp Suite's Proxy to capture requests and identify API endpoints.
+Organize endpoints into categories based on roles, functions, and critical actions.
+```
+```
+Stay Updated:
+Follow experts in the field and read write-ups on platforms like Medium and HackerOne.
+Participate in CTFs:
+Join Capture The Flag events to sharpen your skills.
+Collaborate with the Community:
+Engage in forums and bug bounty groups to share knowledge and get feedback.
 ```
