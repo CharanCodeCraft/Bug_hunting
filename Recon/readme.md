@@ -81,6 +81,12 @@ saml
 * Shodan download allows u to download the database data
 * Just use org:domain name to get all data
 * use shodan host get the open ports of domain or ip
+```
+org:"Intigriti"
+http.status:200 org:"Intigriti"
+http.html:"© copyright <company>" # unique keywords
+org:<company> http.title:"Index of" # Finding sites with directory listings enabled
+org:<company> http.component:php
 ### Githhub dorking(finding sensitive info)
 * Manual dorking
     - Search for domain in github, will find many results

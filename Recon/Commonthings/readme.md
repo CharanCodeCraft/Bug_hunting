@@ -43,6 +43,8 @@ For checking open ports i used naabu its very fast by this i can check the resul
 ### List of subdomains with 403 response for fuzzing
 * cat nowaf_subs_domain.com.txt | grep 403 | awk '{print $1}' > 403_subs_domain.com.txt
 ### 403 fuzzing
+* sudo service tor start
+* fuzzing with ffuf - ffuf -u https://www.nestforms.com/FUZZ -mc all -rate 3 -t 5 -x socks5://127.0.0.1:9050
 * Default Wordlist Fuzzing
     - dirsearch -l batches/ -x 403,404,500,400,502,503,429 --random-agent
 * Extension based Fuzzing
@@ -69,6 +71,9 @@ cat  filterparam.txt | grep ".js$" > jsfiles.txt
 * cat jsfiles.txt | nuclei -t /home/charan/nuclei-templates/http/exposures -c 30
 * nuclei -l js.txt -t /home/charan/nuclei-templates/http/exposures -o potential_secrets.txt
 ### JUICY PATTERN FINDING
+* extracting endpoints from js files
+    - curl -s https://target.com/main.js | sed ‘s/\./\n/g’ | grep ‘/api/’ | sort -u | grep -o -E ‘(https?://)?/?[{}a-z0–9A-Z_\.-]{2,}/[{}/a-z0–9A-Z_\.-]+’ ## extracts links and pathes
+    - curl -s https://app.com/main.js | sed ‘s/\./\n/g’ | grep ‘/v1/’ | sort -u ## finds endpoints with the method
 * UUID🆔 for IDOR
     - grep -Eo '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}' filterparm.txt | sort -u 
 * JWT
