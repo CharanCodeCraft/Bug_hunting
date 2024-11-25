@@ -320,6 +320,7 @@ and i got 3 200 ok
 for number 1,2,3
 ```
 ```
+site:*.intigriti.com intext:"privilege escalation" inurl:"programs" intext:"low"
 inurl:admin "login"
 inurl:manager "login"
 inurl:user "login"
