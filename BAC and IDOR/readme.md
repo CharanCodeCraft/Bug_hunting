@@ -2,6 +2,15 @@
 ```
 By narrowing your focus to B2B applications, business logic, and Broken Access Control vulnerabilities, you're positioning yourself in a high-demand niche. With persistent learning and targeted efforts, you can become a successful and sought-after bug bounty hunter. Happy hunting!
 ```
+* List of B2B bug bounty programs for BAC testing (And one game program) on 
+@intigriti
+*
+```
+https://t.co/qOI1yTg1a5
+https://t.co/y2ea0M9D3x
+https://t.co/68Qu4kprpY
+https://t.co/uHWJyomFl6
+```
 ### Reference for theory
 
 - BAC - https://medium.com/@insightfulrohit/all-about-broken-access-control-cf6ec98a990b
@@ -126,7 +135,7 @@ By narrowing your focus to B2B applications, business logic, and Broken Access C
 * Verification access control 
     - Try to differentiate verified and unverified account features and try to access it through unverified 
 
-## Amit tips
+### Amit tips
 ```
 When acting as an editor, you have the ability to invite other users as editors. However, you are not allowed to delete users with "full" permissions. This is where an interesting exploit opportunity arises. The key is to intercept the request when attempting to delete another editor and replace the user ID of the target with that of a full-permission user.
 Example Scenario:
@@ -366,3 +375,90 @@ Join Capture The Flag events to sharpen your skills.
 Collaborate with the Community:
 Engage in forums and bug bounty groups to share knowledge and get feedback.
 ```
+```
+### some of the attack methodologies for IDOR
+```
+Base-Steps:
+1. Create two accounts if possible or else enumerate users first.
+2. Check if the endpoint is private or public and does it contains any kind of id param.
+3. Try changing the param value to some other user and see if it does anything to their account
+```
+```
+Testcase - 1: Add IDs to requests that don’t have them
+GET /api/MyPictureList → /api/MyPictureList?user_id=<other_user_id>
+Testcase - 2: Try replacing parameter names
+Instead of this: 
+GET /api/albums?album_id=<album id>
+Try This: 
+GET /api/albums?account_id=<account id>
+```
+```
+Testcase - 3: Supply multiple values for the same parameter (HPP).
+Instead of this: 
+GET /api/account?id=<your account id>
+Try This: 
+GET /api/account?id=<your account id>&id=<admin's account id>
+Testcase - 4: Try changing the HTTP request method when testing for IDORs
+Instead of this:
+POST /api/account?id=<your account id>
+Try this:    
+PUT /api/account?id=<your account id>
+For RESTful services, try changing GET to POST/PUT/DELETE to discover create/update/delete.
+```
+```
+Testcase - 5: Try changing the request’s content type
+Instead of this:
+POST /api/chat/join/123 […] 
+Content-type: application/text
+user=test
+Try this:
+POST /api/chat/join/123 […] 
+Content-type: application/json 
+{“user”: “test”}
+Testcase - 6: Try changing the requested file type (Test if Ruby)
+Example:
+GET /user_data/2341 --> 401 Unauthorized
+GET /user_data/2341.json --> 200 OK
+Tip: Experiment by appending different file extensions (e.g. .json, .xml, .config)
+```
+```
+Testcase - 7: Does the app ask for non-numeric IDs? Use numeric IDs instead
+Try numeric IDs anywhere non-numeric IDs are accepted
+Example:
+username=user1 → username=1234
+account_id=7541A92F-0101-4D1E-BBB0-EB5032FE1686 → account_id=5678
+album_id=MyPictures → album_id=12
+Testcase - 8: Try using an array
+ For example:
+{“id”:19} → {“id”:[19]}
+Testcase - 9: Wildcard ID
+For example:
+GET /api/users/<user_id>/ → GET /api/users/*
+Testcase - 10: Path Traversal
+For example:
+GET /api/users/<user_id>/ → GET /api/users/<user_id>/../<user_id>
+```
+```
+Testcase - 11: Pay attention to new features
+If you stumble upon a newly added feature within the web app, such as the ability to upload a profile picture for an upcoming charity event, and it performs an API call to:
+/api/CharityEventFeb2021/user/pp/<ID>
+```
+### Nahamsec tips
+* we can't hit our first milestone($1000) if we bounce back between programs
+* Running same automated tools like others are doing gets u no where 
+* Pick one program and stick with it
+* The real vulnerability comes from knowing the program well enough so u can spot what everybody is missing 
+* It's not just about testing their endpoints it's about understanding their buisness 
+* You have to got to match ur hunting style based on program u choose 
+* Tools make u efficient but will not replace u
+* U need to make a bug bounty hobby even just one to two hour a day is enough at start, it's just like going to gym 
+* breaking things week by week 
+1. Week 1: Program selection
+    * Don't rush 
+    * select company with massive attack surface 
+    * pick three and narrow down to one 
+2. Week 2: knowing about the target 
+    * learn everything about their buisness 
+    * Look their API docs and youtube videos 
+    * also create account with different applications and map all different features of targets
+3. Week 3: Start to test
